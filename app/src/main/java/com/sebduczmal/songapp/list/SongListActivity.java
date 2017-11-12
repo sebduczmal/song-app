@@ -27,4 +27,16 @@ public class SongListActivity extends BaseActivity implements SongListView {
         DaggerSongListComponent.builder().songListModule(new SongListComponent.SongListModule())
                 .applicationComponent(getApplicationComponent()).build().inject(this);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.attachView(this);
+    }
+
+    @Override
+    protected void onStop() {
+        presenter.detachView();
+        super.onStop();
+    }
 }
