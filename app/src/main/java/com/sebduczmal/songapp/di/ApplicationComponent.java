@@ -2,6 +2,8 @@ package com.sebduczmal.songapp.di;
 
 import android.content.Context;
 
+import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
+
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
@@ -10,6 +12,8 @@ import dagger.Provides;
 public interface ApplicationComponent {
 
     Context exposeContext();
+
+    RemoteSongsRepository exposeSongsRepository();
 
     @Module
     class ApplicationModule {
@@ -23,6 +27,11 @@ public interface ApplicationComponent {
         @Provides
         public Context provideContext() {
             return context;
+        }
+
+        @Provides
+        public RemoteSongsRepository providesRemoteSongsRepository() {
+            return new RemoteSongsRepository();
         }
     }
 }

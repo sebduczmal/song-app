@@ -1,5 +1,6 @@
 package com.sebduczmal.songapp.list.di;
 
+import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
 import com.sebduczmal.songapp.di.ApplicationComponent;
 import com.sebduczmal.songapp.list.SongListActivity;
 import com.sebduczmal.songapp.list.SongListPresenter;
@@ -18,8 +19,9 @@ public interface SongListComponent {
     class SongListModule {
 
         @Provides
-        public SongListPresenter provideShoppingListPresenter() {
-            return new SongListPresenter();
+        public SongListPresenter provideShoppingListPresenter(RemoteSongsRepository
+                                                                              remoteSongsRepository) {
+            return new SongListPresenter(remoteSongsRepository);
         }
     }
 }
