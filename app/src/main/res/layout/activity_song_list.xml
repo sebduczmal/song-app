@@ -8,10 +8,32 @@
         android:orientation="vertical"
         >
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="@dimen/search_bar_padding">
+
+            <EditText
+                android:id="@+id/input_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorAccent"
+                android:hint="@string/search_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="@color/colorPrimaryText"
+                android:textColorHint="@color/colorPrimaryText"/>
+
+        </FrameLayout>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_songs"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_songs"

@@ -25,7 +25,13 @@ public class SongListPresenter extends BasePresenter<SongListView> {
                 .songs(searchQuery, RemoteSongsRepository.RESPONSE_LIMIT)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(apiResponseModel -> view().updateSongs(apiResponseModel.getResults())));
+                .doOnSubscribe(disposable -> {
+                    view().showLoading();
+                })
+                .subscribe(apiResponseModel -> {
+                    view().updateSongs(apiResponseModel.getResults());
+                    view().hideLoading();
+                }));
     }
 
     @Override
