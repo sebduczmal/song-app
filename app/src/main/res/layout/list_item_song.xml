@@ -23,6 +23,7 @@
             android:layout_height="@dimen/album_thumbnail_size"
             android:layout_marginEnd="@dimen/album_thumbnail_margin_end"
             app:imageUrl="@{model.thumbnailUrl}"
+            app:imagePlaceholder="@{@drawable/ic_album_black}"
             />
 
         <LinearLayout
