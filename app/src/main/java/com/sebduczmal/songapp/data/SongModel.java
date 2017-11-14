@@ -35,4 +35,28 @@ public class SongModel {
     public String getAlbum() {
         return album;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
 }

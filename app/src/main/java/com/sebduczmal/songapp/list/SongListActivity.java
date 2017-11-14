@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 
@@ -114,6 +115,8 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         binding.recyclerSongs.setLayoutManager(linearLayoutManager);
+        binding.recyclerSongs.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
         binding.recyclerSongs.setAdapter(songListAdapter);
     }
 

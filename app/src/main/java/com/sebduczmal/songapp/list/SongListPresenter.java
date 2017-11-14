@@ -25,6 +25,7 @@ public class SongListPresenter extends BasePresenter<SongListView> {
     }
 
     public void loadSongs(String searchQuery, SongRepositoryType songRepositoryType) {
+        disposables.clear();
         switch (songRepositoryType) {
             case ALL:
                 songModelSingle = Single.zip(localSongsRepository.getSongsObservable(searchQuery),

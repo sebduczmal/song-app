@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.sebduczmal.songapp.BuildConfig;
 import com.sebduczmal.songapp.data.SongModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class RemoteSongsRepository implements Api {
 
     public static final int RESPONSE_LIMIT = 25;
     private static final String API_URL = "https://itunes.apple.com/";
+    private static final String ISO_DATE_PATTERN = "yyyy-MM-dd'T'hh:mm:ss'Z'";
 
     private final Api api;
 
@@ -37,9 +40,16 @@ public class RemoteSongsRepository implements Api {
         if (TextUtils.isEmpty(searchQuery)) {
             return Single.just(Collections.emptyList());
         } else {
+            final SimpleDateFormat dateFormat = new SimpleDateFormat(ISO_DATE_PATTERN);
+            final Calendar calendar = Calendar.getInstance();
             return songs(searchQuery, RESPONSE_LIMIT)
                     .subscribeOn(Schedulers.io())
-                    .map(apiResponseModel -> apiResponseModel.getResults());
+                    .flattenAsObservable(apiResponseModel -> apiResponseModel.getResults())
+                    .map(songModel -> {
+                        calendar.setTime(dateFormat.parse(songModel.getYear()));
+                        songModel.setYear(String.valueOf(calendar.get(Calendar.YEAR)));
+                        return songModel;
+                    }).toList();
         }
     }
 
