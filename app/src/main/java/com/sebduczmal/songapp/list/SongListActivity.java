@@ -2,12 +2,18 @@ package com.sebduczmal.songapp.list;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.MenuItem;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.sebduczmal.songapp.BaseActivity;
 import com.sebduczmal.songapp.R;
 import com.sebduczmal.songapp.data.SongModel;
+import com.sebduczmal.songapp.data.SongRepositoryType;
 import com.sebduczmal.songapp.databinding.ActivitySongListBinding;
 import com.sebduczmal.songapp.list.di.DaggerSongListComponent;
 import com.sebduczmal.songapp.list.di.SongListComponent;
@@ -19,13 +25,16 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
-public class SongListActivity extends BaseActivity implements SongListView {
+public class SongListActivity extends BaseActivity implements SongListView, NavigationView
+        .OnNavigationItemSelectedListener {
 
     @Inject protected SongListPresenter presenter;
     private ActivitySongListBinding binding;
     private SongListAdapter songListAdapter;
     private CompositeDisposable viewsDisposables = new CompositeDisposable();
+    private SongRepositoryType currentRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,8 @@ public class SongListActivity extends BaseActivity implements SongListView {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_song_list);
         setupSongsList();
         setupViews();
+        setupDrawer();
+        currentRepository = SongRepositoryType.ALL;
     }
 
     private void injectDependencies() {
@@ -55,6 +66,15 @@ public class SongListActivity extends BaseActivity implements SongListView {
     }
 
     @Override
+    public void onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void showLoading() {
         showProgressDialog(R.string.loading_songs);
     }
@@ -69,6 +89,26 @@ public class SongListActivity extends BaseActivity implements SongListView {
         songListAdapter.updateSongs(songModels);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_all:
+                changeRepositoryType(SongRepositoryType.ALL);
+                break;
+            case R.id.nav_local:
+                changeRepositoryType(SongRepositoryType.LOCAL);
+                break;
+            case R.id.nav_remote:
+                changeRepositoryType(SongRepositoryType.REMOTE);
+                break;
+            default:
+                Timber.d("No action handled");
+        }
+        binding.drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     private void setupSongsList() {
         songListAdapter = new SongListAdapter();
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
@@ -78,10 +118,27 @@ public class SongListActivity extends BaseActivity implements SongListView {
     }
 
     private void setupViews() {
+        setSupportActionBar(binding.toolbar);
         viewsDisposables.add(RxTextView.afterTextChangeEvents(binding.inputSearch)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewAfterTextChangeEvent -> presenter
-                        .loadSongs(binding.inputSearch.getText().toString())));
+                        .loadSongs(binding.inputSearch.getText().toString(), currentRepository)));
+    }
+
+    private void setupDrawer() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R
+                .string.navigation_drawer_close);
+        binding.drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+        binding.navView.setNavigationItemSelectedListener(this);
+    }
+
+    private void changeRepositoryType(SongRepositoryType type) {
+        currentRepository = type;
+        final String inputSearchText = binding.inputSearch.getText().toString();
+        binding.inputSearch.setText(inputSearchText);
+        binding.inputSearch.setSelection(inputSearchText.length());
     }
 }

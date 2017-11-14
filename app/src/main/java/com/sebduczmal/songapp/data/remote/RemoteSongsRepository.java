@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemoteSongsRepository implements Api {
 
-    public static final int RESPONSE_LIMIT = 100;
+    public static final int RESPONSE_LIMIT = 25;
     private static final String API_URL = "https://itunes.apple.com/";
 
     private final Api api;
