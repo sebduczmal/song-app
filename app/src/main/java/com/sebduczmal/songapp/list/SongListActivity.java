@@ -49,7 +49,7 @@ public class SongListActivity extends BaseActivity implements SongListView {
 
     @Override
     protected void onStop() {
-        viewsDisposables.dispose();
+        viewsDisposables.clear();
         presenter.detachView();
         super.onStop();
     }

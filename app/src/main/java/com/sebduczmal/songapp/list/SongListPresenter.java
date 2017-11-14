@@ -1,35 +1,31 @@
 package com.sebduczmal.songapp.list;
 
-import android.text.TextUtils;
-
 import com.sebduczmal.songapp.BasePresenter;
+import com.sebduczmal.songapp.data.local.LocalSongsRepository;
 import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class SongListPresenter extends BasePresenter<SongListView> {
 
     private final RemoteSongsRepository remoteSongsRepository;
+    private final LocalSongsRepository localSongsRepository;
 
-    public SongListPresenter(RemoteSongsRepository remoteSongsRepository) {
+    public SongListPresenter(RemoteSongsRepository remoteSongsRepository, LocalSongsRepository
+            localSongsRepository) {
         this.remoteSongsRepository = remoteSongsRepository;
+        this.localSongsRepository = localSongsRepository;
     }
 
     public void loadSongs(String searchQuery) {
-        if (TextUtils.isEmpty(searchQuery)) {
-            return;
-        }
-        disposables.add(remoteSongsRepository
-                .songs(searchQuery, RemoteSongsRepository.RESPONSE_LIMIT)
-                .subscribeOn(Schedulers.io())
+        disposables.add(localSongsRepository.getSongsObservable(searchQuery)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> {
                     view().showLoading();
                 })
-                .subscribe(apiResponseModel -> {
-                    view().updateSongs(apiResponseModel.getResults());
+                .subscribe(songModels -> {
+                    view().updateSongs(songModels);
                     view().hideLoading();
                 }));
     }

@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class SongModel {
 
-    @SerializedName(value="trackName", alternate = {"Song Clean"}) private String title;
-    @SerializedName(value="artistName", alternate = {"ARTIST CLEAN"}) private String artist;
-    @SerializedName(value="releaseDate", alternate = {"Release Year"}) private String year;
-    @SerializedName(value="collectionName", alternate = {"COMBINED"}) private String album;
+    @SerializedName(value = "trackName", alternate = {"Song Clean"}) private String title;
+    @SerializedName(value = "artistName", alternate = {"ARTIST CLEAN"}) private String artist;
+    @SerializedName(value = "releaseDate", alternate = {"Release Year"}) private String year;
+    @SerializedName(value = "collectionName", alternate = {"COMBINED"}) private String album;
     @SerializedName("primaryGenreName") private String genre;
     @SerializedName("artworkUrl100") private String thumbnailUrl;
 

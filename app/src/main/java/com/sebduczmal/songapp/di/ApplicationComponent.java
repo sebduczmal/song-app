@@ -2,6 +2,7 @@ package com.sebduczmal.songapp.di;
 
 import android.content.Context;
 
+import com.sebduczmal.songapp.data.local.LocalSongsRepository;
 import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
 
 import dagger.Component;
@@ -13,7 +14,9 @@ public interface ApplicationComponent {
 
     Context exposeContext();
 
-    RemoteSongsRepository exposeSongsRepository();
+    RemoteSongsRepository exposeRemoteSongsRepository();
+
+    LocalSongsRepository exposeLocalSongsRepository();
 
     @Module
     class ApplicationModule {
@@ -32,6 +35,11 @@ public interface ApplicationComponent {
         @Provides
         public RemoteSongsRepository providesRemoteSongsRepository() {
             return new RemoteSongsRepository();
+        }
+
+        @Provides
+        public LocalSongsRepository providesLocalSongsRepository() {
+            return new LocalSongsRepository(context);
         }
     }
 }

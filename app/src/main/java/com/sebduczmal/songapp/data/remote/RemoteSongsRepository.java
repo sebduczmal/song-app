@@ -1,9 +1,16 @@
 package com.sebduczmal.songapp.data.remote;
 
 
+import android.text.TextUtils;
+
 import com.sebduczmal.songapp.BuildConfig;
+import com.sebduczmal.songapp.data.SongModel;
+
+import java.util.Collections;
+import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -24,6 +31,16 @@ public class RemoteSongsRepository implements Api {
     @Override
     public Single<ApiResponseModel> songs(String term, int limit) {
         return api.songs(term, limit);
+    }
+
+    public Single<List<SongModel>> getSongsObservable(String searchQuery) {
+        if (TextUtils.isEmpty(searchQuery)) {
+            return Single.just(Collections.emptyList());
+        } else {
+            return songs(searchQuery, RESPONSE_LIMIT)
+                    .subscribeOn(Schedulers.io())
+                    .map(apiResponseModel -> apiResponseModel.getResults());
+        }
     }
 
     private Api initializeApi() {
