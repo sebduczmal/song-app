@@ -8,4 +8,7 @@
     <string name="repositories">Repositories</string>
     <string name="navigation_drawer_open">Open drawer</string>
     <string name="navigation_drawer_close">Close drawer</string>
+    <string name="genre">Genre:&#160;</string>
+    <string name="year">Release year:&#160;</string>
+    <string name="album">Album:&#160;</string>
 </resources>

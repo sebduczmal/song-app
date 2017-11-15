@@ -19,13 +19,13 @@
         <FrameLayout
             android:id="@+id/album_cover_background"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="@dimen/details_cover_background_height"
             android:background="@color/colorDivider">
 
             <ImageView
                 android:id="@+id/album_cover"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/details_album_cover_size"
+                android:layout_height="@dimen/details_album_cover_size"
                 android:layout_gravity="center"
                 app:imagePlaceholder="@{@drawable/ic_album_black}"
                 app:imageUrl="@{model.thumbnailUrl}"
@@ -45,47 +45,40 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:paddingBottom="@dimen/details_item_padding_bottom"
                 android:text="@{model.title}"
                 android:textColor="@color/colorPrimaryTextDark"
-                android:textSize="@dimen/item_title_text_size"/>
+                android:textSize="@dimen/details_title_text_size"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:paddingBottom="@dimen/details_item_padding_bottom"
                 android:text="@{model.artist}"
                 android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/item_subtitle_text_size"/>
+                android:textSize="@dimen/details_artist_text_size"/>
 
             <TextView
+                style="@style/DetailsMiscText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{model.album}"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/item_subtitle_text_size"/>
+                android:text="@{@string/album + model.album}"/>
 
             <TextView
+                style="@style/DetailsMiscText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{model.year}"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/item_subtitle_text_size"
-                android:visibility="@{model.hasYear() ? View.VISIBLE : View.GONE}"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{model.genre}"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="@dimen/item_subtitle_text_size"
+                android:text="@{@string/genre + model.genre}"
                 android:visibility="@{model.hasGenre() ? View.VISIBLE : View.GONE}"/>
+
+            <TextView
+                style="@style/DetailsMiscText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/year + model.year}"
+                android:visibility="@{model.hasYear() ? View.VISIBLE : View.GONE}"/>
 
         </LinearLayout>
 
