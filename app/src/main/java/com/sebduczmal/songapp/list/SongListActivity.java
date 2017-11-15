@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.sebduczmal.songapp.BaseActivity;
@@ -44,7 +45,6 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         injectDependencies();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_song_list);
         setupSongsList();
-        setupViews();
         setupDrawer();
         currentRepository = SongRepositoryType.ALL;
     }
@@ -57,6 +57,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     @Override
     protected void onResume() {
         super.onResume();
+        setupSearchBar();
         presenter.attachView(this);
     }
 
@@ -78,12 +79,12 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
 
     @Override
     public void showLoading() {
-        showProgressDialog(R.string.loading_songs);
+        binding.loadingBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
-        hideProgressDialog();
+        binding.loadingBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -128,8 +129,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         binding.recyclerSongs.setAdapter(songListAdapter);
     }
 
-    private void setupViews() {
-        setSupportActionBar(binding.toolbar);
+    private void setupSearchBar() {
         viewsDisposables.add(RxTextView.afterTextChangeEvents(binding.inputSearch)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -138,6 +138,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     }
 
     private void setupDrawer() {
+        setSupportActionBar(binding.toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R
                 .string.navigation_drawer_close);

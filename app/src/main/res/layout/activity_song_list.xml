@@ -35,23 +35,33 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/colorSearchBar"
+                android:elevation="@dimen/search_bar_elevation"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:paddingBottom="@dimen/search_bar_padding"
-                android:paddingEnd="@dimen/search_bar_padding"
-                android:paddingStart="@dimen/search_bar_padding">
+                android:paddingBottom="@dimen/search_bar_padding_vertical"
+                android:paddingEnd="@dimen/search_bar_padding_horizontal"
+                android:paddingStart="@dimen/search_bar_padding_horizontal"
+                android:paddingTop="@dimen/search_bar_padding_vertical">
+
+                <android.support.v4.widget.ContentLoadingProgressBar
+                    android:id="@+id/loading_bar"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="@dimen/progress_wheel_size"
+                    android:layout_height="@dimen/progress_wheel_size"
+                    android:layout_gravity="end|center_vertical"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/input_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="@color/colorSearchBar"
                     android:hint="@string/search_hint"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textColorHint="@color/colorPrimaryText"/>
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textColorHint="@color/colorHint"/>
 
             </FrameLayout>
 
