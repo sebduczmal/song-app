@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View"></import>
+
+        <variable
+            name="model"
+            type="com.sebduczmal.songapp.data.SongModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/colorDivider">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                app:imagePlaceholder="@{@drawable/ic_album_black}"
+                app:imageUrl="@{model.thumbnailUrl}"
+                />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/details_dialog_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{model.title}"
+                android:textColor="@color/colorPrimaryTextDark"
+                android:textSize="@dimen/item_title_text_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{model.artist}"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/item_subtitle_text_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{model.album}"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/item_subtitle_text_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{model.year}"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/item_subtitle_text_size"
+                android:visibility="@{model.hasYear() ? View.VISIBLE : View.GONE}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{model.genre}"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="@dimen/item_subtitle_text_size"
+                android:visibility="@{model.hasGenre() ? View.VISIBLE : View.GONE}"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

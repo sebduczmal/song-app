@@ -8,13 +8,19 @@
         <variable
             name="model"
             type="com.sebduczmal.songapp.data.SongModel"/>
+
+        <variable
+            name="listener"
+            type="com.sebduczmal.songapp.list.OnSongListClickListener"/>
     </data>
 
     <LinearLayout
+        android:id="@+id/song_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:onClick="@{() -> listener.onSongItemClick(model)}"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:orientation="horizontal">

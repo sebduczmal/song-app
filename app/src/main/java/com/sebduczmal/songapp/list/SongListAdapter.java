@@ -15,6 +15,7 @@ import java.util.List;
 public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongListViewHolder> {
 
     private List<SongModel> songs;
+    private OnSongListClickListener onSongListClickListener;
 
     public SongListAdapter() {
         songs = new ArrayList<>();
@@ -33,6 +34,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
         final ListItemSongBinding binding = holder.viewDataBinding;
 
         binding.setModel(songModel);
+        binding.setListener(onSongListClickListener);
         binding.executePendingBindings();
     }
 
@@ -45,6 +47,10 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
         this.songs.clear();
         this.songs.addAll(songs);
         notifyDataSetChanged();
+    }
+
+    public void setOnSongListClickListener(OnSongListClickListener listener) {
+        onSongListClickListener = listener;
     }
 
     static class SongListViewHolder extends RecyclerView.ViewHolder {

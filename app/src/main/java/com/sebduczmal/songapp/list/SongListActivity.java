@@ -16,6 +16,7 @@ import com.sebduczmal.songapp.R;
 import com.sebduczmal.songapp.data.SongModel;
 import com.sebduczmal.songapp.data.SongRepositoryType;
 import com.sebduczmal.songapp.databinding.ActivitySongListBinding;
+import com.sebduczmal.songapp.details.SongDetailsFragment;
 import com.sebduczmal.songapp.list.di.DaggerSongListComponent;
 import com.sebduczmal.songapp.list.di.SongListComponent;
 
@@ -29,7 +30,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 public class SongListActivity extends BaseActivity implements SongListView, NavigationView
-        .OnNavigationItemSelectedListener {
+        .OnNavigationItemSelectedListener, OnSongListClickListener {
 
     @Inject protected SongListPresenter presenter;
     private ActivitySongListBinding binding;
@@ -91,6 +92,12 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     }
 
     @Override
+    public void onSongItemClick(SongModel songModel) {
+        SongDetailsFragment songDetailsFragment = SongDetailsFragment.newInstance(songModel);
+        songDetailsFragment.show(getSupportFragmentManager(), "details-dialog-fragment");
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id) {
@@ -112,6 +119,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
 
     private void setupSongsList() {
         songListAdapter = new SongListAdapter();
+        songListAdapter.setOnSongListClickListener(this);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false);
         binding.recyclerSongs.setLayoutManager(linearLayoutManager);
