@@ -1,6 +1,8 @@
 package com.sebduczmal.songapp.details;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +16,9 @@ import android.view.WindowManager;
 import com.sebduczmal.songapp.R;
 import com.sebduczmal.songapp.data.SongModel;
 import com.sebduczmal.songapp.databinding.DialogFragmentSongDetailsBinding;
+import com.sebduczmal.songapp.util.ImageUtil;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class SongDetailsFragment extends DialogFragment {
 
@@ -51,5 +56,23 @@ public class SongDetailsFragment extends DialogFragment {
         getDialog().getWindow().setLayout(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setAlbumCoverBackgroundColor();
+    }
+
+    private void setAlbumCoverBackgroundColor() {
+        Picasso.with(getActivity()).load(songModel.getThumbnailUrl()).into(new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                ImageUtil.radialGradientFromBitmap(bitmap, binding.albumCoverBackground);
+            }
+
+            @Override public void onBitmapFailed(Drawable errorDrawable) {}
+
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {}
+        });
     }
 }
