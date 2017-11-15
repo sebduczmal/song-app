@@ -49,6 +49,10 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
         notifyDataSetChanged();
     }
 
+    public List<SongModel> getSongs() {
+        return songs;
+    }
+
     public void setOnSongListClickListener(OnSongListClickListener listener) {
         onSongListClickListener = listener;
     }

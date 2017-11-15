@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
       tools:showIn="navigation_view">
@@ -15,6 +17,22 @@
                 <item
                     android:id="@+id/nav_remote"
                     android:title="@string/label_remote"/>
+            </menu>
+        </item>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="@string/sort_by">
+            <menu>
+                <item
+                    android:id="@+id/sort_title"
+                    android:title="@string/title"/>
+                <item
+                    android:id="@+id/sort_artist"
+                    android:title="@string/artist"/>
+                <item
+                    android:id="@+id/sort_year"
+                    android:title="@string/release_year"/>
             </menu>
         </item>
     </group>

@@ -11,4 +11,6 @@ public interface SongListView {
     void hideLoading();
 
     void updateSongs(List<SongModel> songModels);
+
+    void onSongsLoadingError();
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.sebduczmal.songapp.BaseActivity;
@@ -20,6 +21,7 @@ import com.sebduczmal.songapp.databinding.ActivitySongListBinding;
 import com.sebduczmal.songapp.details.SongDetailsFragment;
 import com.sebduczmal.songapp.list.di.DaggerSongListComponent;
 import com.sebduczmal.songapp.list.di.SongListComponent;
+import com.sebduczmal.songapp.util.SortBy;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +40,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     private SongListAdapter songListAdapter;
     private CompositeDisposable viewsDisposables = new CompositeDisposable();
     private SongRepositoryType currentRepository;
+    private SortBy sortBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         setupSongsList();
         setupDrawer();
         currentRepository = SongRepositoryType.ALL;
+        sortBy = SortBy.TITLE;
     }
 
     private void injectDependencies() {
@@ -93,6 +97,12 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     }
 
     @Override
+    public void onSongsLoadingError() {
+        binding.loadingBar.setVisibility(View.GONE);
+        Toast.makeText(this, R.string.songs_loading_error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onSongItemClick(SongModel songModel) {
         SongDetailsFragment songDetailsFragment = SongDetailsFragment.newInstance(songModel);
         songDetailsFragment.show(getSupportFragmentManager(), "details-dialog-fragment");
@@ -110,6 +120,18 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
                 break;
             case R.id.nav_remote:
                 changeRepositoryType(SongRepositoryType.REMOTE);
+                break;
+            case R.id.sort_title:
+                sortBy = SortBy.TITLE;
+                presenter.sortSongs(songListAdapter.getSongs(), sortBy);
+                break;
+            case R.id.sort_artist:
+                sortBy = SortBy.ARTIST;
+                presenter.sortSongs(songListAdapter.getSongs(), sortBy);
+                break;
+            case R.id.sort_year:
+                sortBy = SortBy.YEAR;
+                presenter.sortSongs(songListAdapter.getSongs(), sortBy);
                 break;
             default:
                 Timber.d("No action handled");
@@ -134,7 +156,8 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewAfterTextChangeEvent -> presenter
-                        .loadSongs(binding.inputSearch.getText().toString(), currentRepository)));
+                        .loadSongs(binding.inputSearch.getText().toString(), currentRepository,
+                                sortBy)));
     }
 
     private void setupDrawer() {
