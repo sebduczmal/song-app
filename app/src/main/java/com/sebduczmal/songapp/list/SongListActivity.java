@@ -2,12 +2,10 @@ package com.sebduczmal.songapp.list;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,9 +33,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class SongListActivity extends BaseActivity implements SongListView, NavigationView
-        .OnNavigationItemSelectedListener, OnSongListClickListener, AdapterView
-        .OnItemSelectedListener {
+public class SongListActivity extends BaseActivity implements SongListView,
+        OnSongListClickListener, AdapterView.OnItemSelectedListener {
 
     @Inject protected SongListPresenter presenter;
     private ActivitySongListBinding binding;
@@ -55,7 +52,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         injectDependencies();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_song_list);
         setupSongsList();
-        setupDrawer();
+        setupToolbar();
         setupSpinnerAdapters();
         currentRepository = SongRepositoryType.ALL;
         sortBy = SortBy.TITLE;
@@ -81,12 +78,50 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     }
 
     @Override
-    public void onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_all:
+                changeRepositoryType(SongRepositoryType.ALL);
+                item.setChecked(true);
+                break;
+            case R.id.nav_local:
+                changeRepositoryType(SongRepositoryType.LOCAL);
+                item.setChecked(true);
+                break;
+            case R.id.nav_remote:
+                changeRepositoryType(SongRepositoryType.REMOTE);
+                item.setChecked(true);
+                break;
+            case R.id.sort_title:
+                sortBy = SortBy.TITLE;
+                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
+                item.setChecked(true);
+                break;
+            case R.id.sort_artist:
+                sortBy = SortBy.ARTIST;
+                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
+                item.setChecked(true);
+                break;
+            case R.id.sort_year:
+                sortBy = SortBy.YEAR;
+                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
+                item.setChecked(true);
+                break;
+            case R.id.clear_filters:
+                clearFilters();
+                break;
+            default:
+                Timber.d("No action handled");
         }
+        return true;
     }
 
     @Override
@@ -147,41 +182,6 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.nav_all:
-                changeRepositoryType(SongRepositoryType.ALL);
-                break;
-            case R.id.nav_local:
-                changeRepositoryType(SongRepositoryType.LOCAL);
-                break;
-            case R.id.nav_remote:
-                changeRepositoryType(SongRepositoryType.REMOTE);
-                break;
-            case R.id.sort_title:
-                sortBy = SortBy.TITLE;
-                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
-                break;
-            case R.id.sort_artist:
-                sortBy = SortBy.ARTIST;
-                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
-                break;
-            case R.id.sort_year:
-                sortBy = SortBy.YEAR;
-                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
-                break;
-            case R.id.clear_filters:
-                clearFilters();
-                break;
-            default:
-                Timber.d("No action handled");
-        }
-        binding.drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
             return;
@@ -224,14 +224,8 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
                                 sortBy)));
     }
 
-    private void setupDrawer() {
+    private void setupToolbar() {
         setSupportActionBar(binding.toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R
-                .string.navigation_drawer_close);
-        binding.drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        binding.navView.setNavigationItemSelectedListener(this);
     }
 
     private void changeRepositoryType(SongRepositoryType type) {
