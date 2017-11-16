@@ -236,17 +236,17 @@ public class SongListActivity extends BaseActivity implements SongListView,
     }
 
     private void setupSpinnerAdapters() {
-        titleFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        titleFilterAdapter = new ArrayAdapter(this, R.layout.spinner_item);
         titleFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerTitleFilter.setAdapter(titleFilterAdapter);
         binding.spinnerTitleFilter.setOnItemSelectedListener(this);
 
-        artistFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        artistFilterAdapter = new ArrayAdapter(this, R.layout.spinner_item);
         artistFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerArtistFilter.setAdapter(artistFilterAdapter);
         binding.spinnerArtistFilter.setOnItemSelectedListener(this);
 
-        yearFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        yearFilterAdapter = new ArrayAdapter(this, R.layout.spinner_item);
         yearFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerYearFilter.setAdapter(yearFilterAdapter);
         binding.spinnerYearFilter.setOnItemSelectedListener(this);

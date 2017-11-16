@@ -68,21 +68,18 @@
 
                 <Spinner
                     android:id="@+id/spinner_title_filter"
-                    style="@style/FilterSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
                 <Spinner
                     android:id="@+id/spinner_artist_filter"
-                    style="@style/FilterSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
                 <Spinner
                     android:id="@+id/spinner_year_filter"
-                    style="@style/FilterSpinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>

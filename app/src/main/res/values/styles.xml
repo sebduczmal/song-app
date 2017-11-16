@@ -29,5 +29,9 @@
         <item name="android:paddingBottom">@dimen/spinner_padding_vertical</item>
         <item name="android:paddingTop">@dimen/spinner_padding_vertical</item>
         <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="android:textSize">@dimen/spinner_text_size</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:textAlignment">inherit</item>
     </style>
 </resources>
