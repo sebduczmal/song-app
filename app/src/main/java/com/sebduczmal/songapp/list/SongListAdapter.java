@@ -14,11 +14,12 @@ import java.util.List;
 
 public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongListViewHolder> {
 
-    private List<SongModel> songs;
+    private List<SongModel> songsToDisplay;
+    private List<SongModel> songsBase;
     private OnSongListClickListener onSongListClickListener;
 
     public SongListAdapter() {
-        songs = new ArrayList<>();
+        songsToDisplay = new ArrayList<>();
     }
 
     @Override
@@ -30,7 +31,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
 
     @Override
     public void onBindViewHolder(SongListViewHolder holder, int position) {
-        final SongModel songModel = songs.get(position);
+        final SongModel songModel = songsToDisplay.get(position);
         final ListItemSongBinding binding = holder.viewDataBinding;
 
         binding.setModel(songModel);
@@ -40,17 +41,26 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.SongLi
 
     @Override
     public int getItemCount() {
-        return songs.size();
+        return songsToDisplay.size();
     }
 
-    public void updateSongs(List<SongModel> songs) {
-        this.songs.clear();
-        this.songs.addAll(songs);
+    public void updateSongsToDisplay(List<SongModel> songs) {
+        this.songsToDisplay.clear();
+        this.songsToDisplay.addAll(songs);
         notifyDataSetChanged();
     }
 
-    public List<SongModel> getSongs() {
-        return songs;
+    public void updateSongsBase(List<SongModel> songs) {
+        songsBase = songs;
+        updateSongsToDisplay(songsBase);
+    }
+
+    public List<SongModel> getSongsToDisplay() {
+        return songsToDisplay;
+    }
+
+    public List<SongModel> getSongsBase() {
+        return songsBase;
     }
 
     public void setOnSongListClickListener(OnSongListClickListener listener) {

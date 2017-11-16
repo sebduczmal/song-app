@@ -21,4 +21,5 @@
     <dimen name="details_item_padding_bottom">2dp</dimen>
     <dimen name="progress_wheel_size">24dp</dimen>
     <dimen name="search_bar_elevation">1dp</dimen>
+    <dimen name="spinner_padding_vertical">8dp</dimen>
 </resources>

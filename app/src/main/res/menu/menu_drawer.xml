@@ -37,4 +37,14 @@
         </item>
     </group>
 
+    <group android:checkableBehavior="single">
+        <item android:title="@string/filters">
+            <menu>
+                <item
+                    android:id="@+id/clear_filters"
+                    android:title="@string/clear_filters"/>
+            </menu>
+        </item>
+    </group>
+
 </menu>

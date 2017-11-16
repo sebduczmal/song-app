@@ -10,6 +10,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -21,6 +23,7 @@ import com.sebduczmal.songapp.databinding.ActivitySongListBinding;
 import com.sebduczmal.songapp.details.SongDetailsFragment;
 import com.sebduczmal.songapp.list.di.DaggerSongListComponent;
 import com.sebduczmal.songapp.list.di.SongListComponent;
+import com.sebduczmal.songapp.util.Constants;
 import com.sebduczmal.songapp.util.SortBy;
 
 import java.util.List;
@@ -33,7 +36,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 public class SongListActivity extends BaseActivity implements SongListView, NavigationView
-        .OnNavigationItemSelectedListener, OnSongListClickListener {
+        .OnNavigationItemSelectedListener, OnSongListClickListener, AdapterView
+        .OnItemSelectedListener {
 
     @Inject protected SongListPresenter presenter;
     private ActivitySongListBinding binding;
@@ -41,6 +45,9 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
     private CompositeDisposable viewsDisposables = new CompositeDisposable();
     private SongRepositoryType currentRepository;
     private SortBy sortBy;
+    private ArrayAdapter<String> titleFilterAdapter;
+    private ArrayAdapter<String> artistFilterAdapter;
+    private ArrayAdapter<String> yearFilterAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,7 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         binding = DataBindingUtil.setContentView(this, R.layout.activity_song_list);
         setupSongsList();
         setupDrawer();
+        setupSpinnerAdapters();
         currentRepository = SongRepositoryType.ALL;
         sortBy = SortBy.TITLE;
     }
@@ -93,13 +101,43 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
 
     @Override
     public void updateSongs(List<SongModel> songModels) {
-        songListAdapter.updateSongs(songModels);
+        songListAdapter.updateSongsBase(songModels);
     }
 
     @Override
     public void onSongsLoadingError() {
         binding.loadingBar.setVisibility(View.GONE);
         Toast.makeText(this, R.string.songs_loading_error, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void updateTitleFilter(List<String> filters) {
+        titleFilterAdapter.clear();
+        titleFilterAdapter.addAll(filters);
+    }
+
+    @Override
+    public void updateArtistFilter(List<String> artists) {
+        artistFilterAdapter.clear();
+        artistFilterAdapter.addAll(artists);
+    }
+
+    @Override
+    public void updateYearFilter(List<String> years) {
+        yearFilterAdapter.clear();
+        yearFilterAdapter.addAll(years);
+    }
+
+    @Override
+    public void setSpinnersToHeaders() {
+        binding.spinnerArtistFilter.setSelection(Constants.BASE_INDEX);
+        binding.spinnerTitleFilter.setSelection(Constants.BASE_INDEX);
+        binding.spinnerYearFilter.setSelection(Constants.BASE_INDEX);
+    }
+
+    @Override
+    public void applyFilter(List<SongModel> songs) {
+        songListAdapter.updateSongsToDisplay(songs);
     }
 
     @Override
@@ -123,21 +161,47 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
                 break;
             case R.id.sort_title:
                 sortBy = SortBy.TITLE;
-                presenter.sortSongs(songListAdapter.getSongs(), sortBy);
+                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
                 break;
             case R.id.sort_artist:
                 sortBy = SortBy.ARTIST;
-                presenter.sortSongs(songListAdapter.getSongs(), sortBy);
+                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
                 break;
             case R.id.sort_year:
                 sortBy = SortBy.YEAR;
-                presenter.sortSongs(songListAdapter.getSongs(), sortBy);
+                presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
+                break;
+            case R.id.clear_filters:
+                clearFilters();
                 break;
             default:
                 Timber.d("No action handled");
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 0) {
+            return;
+        }
+        List<SongModel> listToFilter = songListAdapter.getSongsToDisplay();
+        switch (parent.getId()) {
+            case R.id.spinner_title_filter:
+                presenter.filterSongsByTitle(listToFilter, titleFilterAdapter.getItem(position));
+                break;
+            case R.id.spinner_artist_filter:
+                presenter.filterSongsByArtist(listToFilter, artistFilterAdapter.getItem(position));
+                break;
+            case R.id.spinner_year_filter:
+                presenter.filterSongsByYear(listToFilter, yearFilterAdapter.getItem(position));
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     private void setupSongsList() {
@@ -175,5 +239,28 @@ public class SongListActivity extends BaseActivity implements SongListView, Navi
         final String inputSearchText = binding.inputSearch.getText().toString();
         binding.inputSearch.setText(inputSearchText);
         binding.inputSearch.setSelection(inputSearchText.length());
+    }
+
+    private void setupSpinnerAdapters() {
+        titleFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        titleFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerTitleFilter.setAdapter(titleFilterAdapter);
+        binding.spinnerTitleFilter.setOnItemSelectedListener(this);
+
+        artistFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        artistFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerArtistFilter.setAdapter(artistFilterAdapter);
+        binding.spinnerArtistFilter.setOnItemSelectedListener(this);
+
+        yearFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
+        yearFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerYearFilter.setAdapter(yearFilterAdapter);
+        binding.spinnerYearFilter.setOnItemSelectedListener(this);
+    }
+
+    private void clearFilters() {
+        songListAdapter.updateSongsToDisplay(songListAdapter.getSongsBase());
+        setSpinnersToHeaders();
+        presenter.getAllFilters(songListAdapter.getSongsBase());
     }
 }

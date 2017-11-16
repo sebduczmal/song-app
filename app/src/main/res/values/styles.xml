@@ -24,4 +24,10 @@
         <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="android:textSize">@dimen/item_subtitle_text_size</item>
     </style>
+
+    <style name="FilterSpinner">
+        <item name="android:paddingBottom">@dimen/spinner_padding_vertical</item>
+        <item name="android:paddingTop">@dimen/spinner_padding_vertical</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+    </style>
 </resources>

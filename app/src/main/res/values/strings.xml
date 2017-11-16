@@ -16,4 +16,6 @@
     <string name="artist">Artist</string>
     <string name="release_year">Release year</string>
     <string name="songs_loading_error">Could not download any songs for specified search query!</string>
+    <string name="clear_filters">Clear filters</string>
+    <string name="filters">Filters</string>
 </resources>

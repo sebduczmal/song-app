@@ -5,6 +5,7 @@ import com.sebduczmal.songapp.data.SongModel;
 import com.sebduczmal.songapp.data.SongRepositoryType;
 import com.sebduczmal.songapp.data.local.LocalSongsRepository;
 import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
+import com.sebduczmal.songapp.util.Constants;
 import com.sebduczmal.songapp.util.SortBy;
 
 import java.util.List;
@@ -56,6 +57,8 @@ public class SongListPresenter extends BasePresenter<SongListView> {
                 .subscribe(songModels -> {
                     view().updateSongs(songModels);
                     view().hideLoading();
+                    view().setSpinnersToHeaders();
+                    getAllFilters(songModels);
                 }, throwable -> {
                     view().onSongsLoadingError();
                     Timber.e(throwable, "Songs could not have been fetched");
@@ -72,5 +75,83 @@ public class SongListPresenter extends BasePresenter<SongListView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songModels -> view().updateSongs(songModels)));
+    }
+
+    public void filterSongsByTitle(List<SongModel> songs, String title) {
+        disposables.add(Observable.fromIterable(songs)
+                .filter(songModel -> songModel.getTitle().equalsIgnoreCase(title))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(songModels -> {
+                    view().applyFilter(songModels);
+                    getAllFilters(songModels);
+                }));
+    }
+
+    public void filterSongsByArtist(List<SongModel> songs, String artist) {
+        disposables.add(Observable.fromIterable(songs)
+                .filter(songModel -> songModel.getArtist().equalsIgnoreCase(artist))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(songModels -> {
+                    view().applyFilter(songModels);
+                    getAllFilters(songModels);
+                }));
+    }
+
+    public void filterSongsByYear(List<SongModel> songs, String year) {
+        disposables.add(Observable.fromIterable(songs)
+                .filter(songModel -> songModel.getYear().equalsIgnoreCase(year))
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(songModels -> {
+                    view().applyFilter(songModels);
+                    getAllFilters(songModels);
+                }));
+    }
+
+    private void getTitleFilters(List<SongModel> songs) {
+        disposables.add(Observable.fromIterable(songs)
+                .distinct(songModel -> songModel.getTitle())
+                .map(songModel -> songModel.getTitle())
+                .sorted()
+                .startWith(Constants.FILTER_TITLE)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(strings -> view().updateTitleFilter(strings)));
+    }
+
+    private void getArtistFilters(List<SongModel> songs) {
+        disposables.add(Observable.fromIterable(songs)
+                .distinct(songModel -> songModel.getArtist())
+                .map(songModel -> songModel.getArtist())
+                .sorted()
+                .startWith(Constants.FILTER_ARTISTS)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(strings -> view().updateArtistFilter(strings)));
+    }
+
+    private void getYearFilters(List<SongModel> songs) {
+        disposables.add(Observable.fromIterable(songs)
+                .distinct(songModel -> songModel.getYear())
+                .map(songModel -> songModel.getYear())
+                .sorted()
+                .startWith(Constants.FILTER_YEAR)
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(strings -> view().updateYearFilter(strings)));
+    }
+
+    public void getAllFilters(List<SongModel> songs) {
+        getArtistFilters(songs);
+        getTitleFilters(songs);
+        getYearFilters(songs);
     }
 }
