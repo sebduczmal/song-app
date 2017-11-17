@@ -37,9 +37,32 @@
             android:paddingStart="@dimen/search_bar_padding_horizontal"
             android:paddingTop="@dimen/search_bar_padding_vertical">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorSearchBar"
+                    android:hint="@string/search_hint"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:layout_marginEnd="@dimen/input_search_margin_end"
+                    android:textColor="@color/colorPrimaryTextDark"
+                    android:textColorHint="@color/colorHint"/>
+
+                <ImageView
+                    android:id="@+id/button_clear_query"
+                    android:layout_width="@dimen/clear_button_size"
+                    android:layout_height="@dimen/clear_button_size"
+                    android:layout_gravity="end|center_vertical"
+                    android:clickable="true"
+                    android:src="@drawable/ic_clear"
+                    android:visibility="gone"/>
 
                 <android.support.v4.widget.ContentLoadingProgressBar
                     android:id="@+id/loading_bar"
@@ -48,18 +71,7 @@
                     android:layout_height="@dimen/progress_wheel_size"
                     android:layout_gravity="end|center_vertical"
                     android:visibility="gone"/>
-
-                <EditText
-                    android:id="@+id/input_search"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorSearchBar"
-                    android:hint="@string/search_hint"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:textColor="@color/colorPrimaryTextDark"
-                    android:textColorHint="@color/colorHint"/>
-            </FrameLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

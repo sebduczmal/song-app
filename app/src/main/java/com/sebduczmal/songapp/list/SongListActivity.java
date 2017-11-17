@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,7 +26,6 @@ import com.sebduczmal.songapp.util.Constants;
 import com.sebduczmal.songapp.util.SortBy;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -126,12 +126,16 @@ public class SongListActivity extends BaseActivity implements SongListView,
 
     @Override
     public void showLoading() {
+        binding.buttonClearQuery.setVisibility(View.GONE);
         binding.loadingBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideLoading() {
         binding.loadingBar.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(binding.inputSearch.getText())) {
+            binding.buttonClearQuery.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -217,11 +221,14 @@ public class SongListActivity extends BaseActivity implements SongListView,
 
     private void setupSearchBar() {
         viewsDisposables.add(RxTextView.afterTextChangeEvents(binding.inputSearch)
-                .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewAfterTextChangeEvent -> presenter
                         .loadSongs(binding.inputSearch.getText().toString(), currentRepository,
                                 sortBy)));
+        binding.buttonClearQuery.setOnClickListener(view -> {
+            clearFilters();
+            binding.inputSearch.setText("");
+        });
     }
 
     private void setupToolbar() {
