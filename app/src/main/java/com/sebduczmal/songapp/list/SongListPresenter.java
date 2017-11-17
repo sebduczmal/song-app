@@ -126,7 +126,7 @@ public class SongListPresenter extends BasePresenter<SongListView> {
 
     private void getTitleFilters(List<SongModel> songs) {
         disposables.add(Observable.fromIterable(songs)
-                .distinct(songModel -> songModel.getTitle())
+                .distinct(songModel -> songModel.getTitle().toLowerCase())
                 .map(songModel -> songModel.getTitle())
                 .sorted()
                 .startWith(Constants.FILTER_TITLE)
@@ -138,7 +138,7 @@ public class SongListPresenter extends BasePresenter<SongListView> {
 
     private void getArtistFilters(List<SongModel> songs) {
         disposables.add(Observable.fromIterable(songs)
-                .distinct(songModel -> songModel.getArtist())
+                .distinct(songModel -> songModel.getArtist().toLowerCase())
                 .map(songModel -> songModel.getArtist())
                 .sorted()
                 .startWith(Constants.FILTER_ARTISTS)
@@ -150,6 +150,7 @@ public class SongListPresenter extends BasePresenter<SongListView> {
 
     private void getYearFilters(List<SongModel> songs) {
         disposables.add(Observable.fromIterable(songs)
+                .filter(songModel -> songModel.hasYear())
                 .distinct(songModel -> songModel.getYear())
                 .map(songModel -> songModel.getYear())
                 .sorted()
