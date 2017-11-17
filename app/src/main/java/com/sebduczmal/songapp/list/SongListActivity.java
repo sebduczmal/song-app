@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -115,8 +117,8 @@ public class SongListActivity extends BaseActivity implements SongListView,
                 presenter.sortSongs(songListAdapter.getSongsToDisplay(), sortBy);
                 item.setChecked(true);
                 break;
-            case R.id.clear_filters:
-                clearFilters();
+            case R.id.show_filters:
+                showFilters();
                 break;
             default:
                 Timber.d("No action handled");
@@ -243,25 +245,43 @@ public class SongListActivity extends BaseActivity implements SongListView,
     }
 
     private void setupSpinnerAdapters() {
-        titleFilterAdapter = new ArrayAdapter(this, R.layout.spinner_item);
+        titleFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
         titleFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerTitleFilter.setAdapter(titleFilterAdapter);
         binding.spinnerTitleFilter.setOnItemSelectedListener(this);
 
-        artistFilterAdapter = new ArrayAdapter(this, R.layout.spinner_item);
+        artistFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
         artistFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerArtistFilter.setAdapter(artistFilterAdapter);
         binding.spinnerArtistFilter.setOnItemSelectedListener(this);
 
-        yearFilterAdapter = new ArrayAdapter(this, R.layout.spinner_item);
+        yearFilterAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item);
         yearFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerYearFilter.setAdapter(yearFilterAdapter);
         binding.spinnerYearFilter.setOnItemSelectedListener(this);
+
+        binding.buttonClearFilters.setOnClickListener(view -> clearFilters());
     }
 
     private void clearFilters() {
         songListAdapter.updateSongsToDisplay(songListAdapter.getSongsBase());
         setSpinnersToHeaders();
         presenter.getAllFilters(songListAdapter.getSongsBase());
+    }
+
+    private void showFilters() {
+        final Animation hide = AnimationUtils.loadAnimation(this, R.anim.anim_hide_filters);
+        final Animation show = AnimationUtils.loadAnimation(this, R.anim.anim_show_filters);
+        if (binding.filtersBar.getVisibility() == View.GONE) {
+            binding.filtersBar.startAnimation(show);
+            binding.searchBar.startAnimation(hide);
+            binding.filtersBar.setVisibility(View.VISIBLE);
+            binding.searchBar.setVisibility(View.GONE);
+        } else {
+            binding.filtersBar.startAnimation(hide);
+            binding.searchBar.startAnimation(show);
+            binding.filtersBar.setVisibility(View.GONE);
+            binding.searchBar.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -28,10 +28,21 @@
     <style name="FilterSpinner">
         <item name="android:paddingBottom">@dimen/spinner_padding_vertical</item>
         <item name="android:paddingTop">@dimen/spinner_padding_vertical</item>
-        <item name="android:textColor">@color/colorSecondaryText</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
         <item name="android:textSize">@dimen/spinner_text_size</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">marquee</item>
         <item name="android:textAlignment">inherit</item>
+    </style>
+
+    <style name="SearchBar">
+        <item name="android:background">@color/colorSearchBar</item>
+        <item name="android:elevation">@dimen/search_bar_elevation</item>
+        <item name="android:paddingBottom">@dimen/search_bar_padding_vertical</item>
+        <item name="android:paddingTop">@dimen/search_bar_padding_vertical</item>
+        <item name="android:paddingStart">@dimen/search_bar_padding_horizontal</item>
+        <item name="android:paddingEnd">@dimen/search_bar_padding_horizontal</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
     </style>
 </resources>

@@ -24,18 +24,11 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/search_bar"
+            style="@style/SearchBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorSearchBar"
-            android:elevation="@dimen/search_bar_elevation"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/search_bar_padding_vertical"
-            android:paddingEnd="@dimen/search_bar_padding_horizontal"
-            android:paddingStart="@dimen/search_bar_padding_horizontal"
-            android:paddingTop="@dimen/search_bar_padding_vertical">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,12 +39,12 @@
                     android:id="@+id/input_search"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/input_search_margin_end"
                     android:layout_weight="1"
                     android:backgroundTint="@color/colorSearchBar"
                     android:hint="@string/search_hint"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
-                    android:layout_marginEnd="@dimen/input_search_margin_end"
                     android:textColor="@color/colorPrimaryTextDark"
                     android:textColorHint="@color/colorHint"/>
 
@@ -73,31 +66,62 @@
                     android:visibility="gone"/>
             </LinearLayout>
 
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/filters_bar"
+            style="@style/SearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/search_bar_padding_vertical"
+                android:paddingTop="@dimen/search_bar_padding_vertical">
 
-                <Spinner
-                    android:id="@+id/spinner_title_filter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/spinner_artist_filter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    <Spinner
+                        android:id="@+id/spinner_title_filter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
 
-                <Spinner
-                    android:id="@+id/spinner_year_filter"
-                    android:layout_width="0dp"
+                    <Spinner
+                        android:id="@+id/spinner_artist_filter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_year_filter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/button_clear_filters"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_gravity="center|end"
+                    android:clickable="true"
+                    android:paddingEnd="@dimen/clear_button_padding_horizontal"
+                    android:paddingStart="@dimen/clear_button_padding_horizontal"
+                    android:paddingTop="@dimen/clear_button_padding_vertical"
+                    android:text="@string/clear"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/clear_filters_text"/>
+
             </LinearLayout>
-
-        </LinearLayout>
+        </FrameLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_songs"

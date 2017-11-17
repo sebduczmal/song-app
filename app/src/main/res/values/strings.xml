@@ -18,4 +18,5 @@
     <string name="songs_loading_error">Could not download any songs for specified search query!</string>
     <string name="clear_filters">Clear filters</string>
     <string name="filters">Filters</string>
+    <string name="clear">Clear</string>
 </resources>
