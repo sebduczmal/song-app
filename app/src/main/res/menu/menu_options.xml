@@ -6,8 +6,37 @@
         android:id="@+id/show_filters"
         android:icon="@drawable/ic_filter"
         android:title="@string/filters"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
+
+    <item
+        android:id="@+id/sort_menu"
+        android:icon="@drawable/ic_sort_by_alpha"
+        android:title="@string/filters"
+        app:showAsAction="always"
+        >
+        <menu>
+
+            <item
+                android:enabled="false"
+                android:title="@string/sort_by"/>
+
+            <group
+                android:id="@+id/menu_group_sort"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sort_title"
+                    android:checked="true"
+                    android:title="@string/title"/>
+                <item
+                    android:id="@+id/sort_artist"
+                    android:title="@string/artist"/>
+                <item
+                    android:id="@+id/sort_year"
+                    android:title="@string/release_year"/>
+            </group>
+        </menu>
+    </item>
 
     <item
         android:enabled="false"
@@ -26,25 +55,6 @@
         <item
             android:id="@+id/nav_remote"
             android:title="@string/label_remote"/>
-    </group>
-
-    <item
-        android:enabled="false"
-        android:title="@string/sort_by"/>
-
-    <group
-        android:id="@+id/menu_group_sort"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/sort_title"
-            android:checked="true"
-            android:title="@string/title"/>
-        <item
-            android:id="@+id/sort_artist"
-            android:title="@string/artist"/>
-        <item
-            android:id="@+id/sort_year"
-            android:title="@string/release_year"/>
     </group>
 
 </menu>
