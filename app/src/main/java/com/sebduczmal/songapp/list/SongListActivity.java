@@ -28,6 +28,7 @@ import com.sebduczmal.songapp.util.Constants;
 import com.sebduczmal.songapp.util.SortBy;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -228,6 +229,7 @@ public class SongListActivity extends BaseActivity implements SongListView,
 
     private void setupSearchBar() {
         viewsDisposables.add(RxTextView.afterTextChangeEvents(binding.inputSearch)
+                .debounce(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textViewAfterTextChangeEvent -> presenter
                         .loadSongs(binding.inputSearch.getText().toString(), currentRepository,
