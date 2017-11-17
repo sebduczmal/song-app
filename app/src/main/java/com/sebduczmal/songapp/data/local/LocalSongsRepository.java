@@ -20,33 +20,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LocalSongsRepository {
 
-    private static final String LOCAL_SONGS_FILE_NAME = "songs-list.json";
+    private AssetsHelper assetsHelper;
 
-    private Context context;
-
-    public LocalSongsRepository(Context context) {
-        this.context = context;
-    }
-
-    private String loadLocalSongsJson() {
-        String json = null;
-        try {
-            final InputStream inputStream = context.getAssets().open(LOCAL_SONGS_FILE_NAME);
-            final int bufferSize = inputStream.available();
-            final byte buffer[] = new byte[bufferSize];
-            inputStream.read(buffer);
-            inputStream.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return json;
-        }
-        return json;
-    }
-
-    private List<SongModel> getLocalSongsList() {
-        final Type type = new TypeToken<List<SongModel>>() {}.getType();
-        return new Gson().fromJson(loadLocalSongsJson(), type);
+    public LocalSongsRepository(AssetsHelper assetsHelper) {
+        this.assetsHelper = assetsHelper;
     }
 
     public Single<List<SongModel>> getSongsObservable(String searchQuery) {
@@ -54,7 +31,7 @@ public class LocalSongsRepository {
             return Single.just(Collections.emptyList());
         } else {
             return Observable
-                    .fromIterable(getLocalSongsList())
+                    .fromIterable(assetsHelper.getLocalSongsList())
                     .subscribeOn(Schedulers.io())
                     .filter(songModel -> songModel.getAlbum().toLowerCase().contains(searchQuery
                             .toLowerCase()))

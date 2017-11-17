@@ -2,6 +2,7 @@ package com.sebduczmal.songapp.di;
 
 import android.content.Context;
 
+import com.sebduczmal.songapp.data.local.AssetsHelper;
 import com.sebduczmal.songapp.data.local.LocalSongsRepository;
 import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
 
@@ -39,7 +40,7 @@ public interface ApplicationComponent {
 
         @Provides
         public LocalSongsRepository providesLocalSongsRepository() {
-            return new LocalSongsRepository(context);
+            return new LocalSongsRepository(new AssetsHelper(context));
         }
     }
 }

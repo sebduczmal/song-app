@@ -29,25 +29,9 @@ public class SongListPresenter extends BasePresenter<SongListView> {
         this.localSongsRepository = localSongsRepository;
     }
 
-    public void loadSongs(String searchQuery, SongRepositoryType songRepositoryType, SortBy
-            sortBy) {
+    public void loadSongs(String query, SongRepositoryType repositoryType, SortBy sortBy) {
         disposables.clear();
-        switch (songRepositoryType) {
-            case ALL:
-                songModelSingle = Single.zip(localSongsRepository.getSongsObservable(searchQuery),
-                        remoteSongsRepository.getSongsObservable(searchQuery),
-                        (songModelsRemote, songModelsLocal) -> {
-                            songModelsRemote.addAll(songModelsLocal);
-                            return songModelsRemote;
-                        });
-                break;
-            case LOCAL:
-                songModelSingle = localSongsRepository.getSongsObservable(searchQuery);
-                break;
-            case REMOTE:
-                songModelSingle = remoteSongsRepository.getSongsObservable(searchQuery);
-                break;
-        }
+        songModelSingle = getDataSource(query, repositoryType);
         disposables.add(songModelSingle.observeOn(AndroidSchedulers.mainThread())
                 .flattenAsObservable(songModels -> songModels)
                 .toSortedList(sortBy.getComparator())
@@ -63,6 +47,27 @@ public class SongListPresenter extends BasePresenter<SongListView> {
                     view().onSongsLoadingError();
                     Timber.e(throwable, "Songs could not have been fetched");
                 }));
+    }
+
+    private Single<List<SongModel>> getDataSource(String query, SongRepositoryType repositoryType) {
+        switch (repositoryType) {
+            case ALL:
+                return getZippedDataSources(query);
+            case REMOTE:
+                return remoteSongsRepository.getSongsObservable(query);
+            case LOCAL:
+            default:
+                return localSongsRepository.getSongsObservable(query);
+        }
+    }
+
+    private Single<List<SongModel>> getZippedDataSources(String query) {
+        return Single.zip(localSongsRepository.getSongsObservable(query),
+                remoteSongsRepository.getSongsObservable(query),
+                (songModelsRemote, songModelsLocal) -> {
+                    songModelsRemote.addAll(songModelsLocal);
+                    return songModelsRemote;
+                });
     }
 
     @Override
@@ -113,6 +118,12 @@ public class SongListPresenter extends BasePresenter<SongListView> {
                 }));
     }
 
+    public void getAllFilters(List<SongModel> songs) {
+        getArtistFilters(songs);
+        getTitleFilters(songs);
+        getYearFilters(songs);
+    }
+
     private void getTitleFilters(List<SongModel> songs) {
         disposables.add(Observable.fromIterable(songs)
                 .distinct(songModel -> songModel.getTitle())
@@ -147,11 +158,5 @@ public class SongListPresenter extends BasePresenter<SongListView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> view().updateYearFilter(strings)));
-    }
-
-    public void getAllFilters(List<SongModel> songs) {
-        getArtistFilters(songs);
-        getTitleFilters(songs);
-        getYearFilters(songs);
     }
 }
