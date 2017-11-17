@@ -77,50 +77,43 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:paddingBottom="@dimen/search_bar_padding_vertical"
                 android:paddingTop="@dimen/search_bar_padding_vertical">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinner_title_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
 
-                    <Spinner
-                        android:id="@+id/spinner_title_filter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                <Spinner
+                    android:id="@+id/spinner_artist_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
 
-                    <Spinner
-                        android:id="@+id/spinner_artist_filter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
+                <Spinner
+                    android:id="@+id/spinner_year_filter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
 
-                    <Spinner
-                        android:id="@+id/spinner_year_filter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"/>
-                </LinearLayout>
-
-                <TextView
+                <ImageView
                     android:id="@+id/button_clear_filters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
+                    android:layout_gravity="end|center_vertical"
                     android:clickable="true"
-                    android:paddingEnd="@dimen/clear_button_padding_horizontal"
                     android:paddingStart="@dimen/clear_button_padding_horizontal"
-                    android:paddingTop="@dimen/clear_button_padding_vertical"
-                    android:text="@string/clear"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/clear_filters_text"/>
+                    android:src="@drawable/ic_clear"/>
 
             </LinearLayout>
+
         </FrameLayout>
 
         <FrameLayout

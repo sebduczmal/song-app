@@ -3,7 +3,7 @@
     <dimen name="recycler_songs_padding">16dp</dimen>
     <dimen name="album_thumbnail_size">64dp</dimen>
     <dimen name="album_thumbnail_margin_end">16dp</dimen>
-    <dimen name="search_bar_padding_vertical">8dp</dimen>
+    <dimen name="search_bar_padding_vertical">10dp</dimen>
     <dimen name="search_bar_padding_horizontal">16dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
