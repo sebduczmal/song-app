@@ -143,6 +143,11 @@ public class SongListActivity extends BaseActivity implements SongListView,
     @Override
     public void updateSongs(List<SongModel> songModels) {
         songListAdapter.updateSongsBase(songModels);
+        if (songModels.isEmpty()) {
+            binding.emptyListIcon.setVisibility(View.VISIBLE);
+        } else {
+            binding.emptyListIcon.setVisibility(View.GONE);
+        }
     }
 
     @Override

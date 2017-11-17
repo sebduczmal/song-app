@@ -123,12 +123,25 @@
             </LinearLayout>
         </FrameLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_songs"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"/>
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_songs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"/>
+
+            <ImageView
+                android:id="@+id/empty_list_icon"
+                android:layout_width="@dimen/icon_empty_results"
+                android:layout_height="@dimen/icon_empty_results"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_search"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 

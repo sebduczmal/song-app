@@ -10,4 +10,5 @@
     <color name="colorDivider">#BDBDBD</color>
     <color name="colorSearchBar">#FFFFFF</color>
     <color name="colorHint">#BDBDBD</color>
+    <color name="colorNoSearchResultIcon">#EEEEEE</color>
 </resources>
