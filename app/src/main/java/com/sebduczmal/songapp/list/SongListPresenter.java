@@ -1,10 +1,10 @@
 package com.sebduczmal.songapp.list;
 
 import com.sebduczmal.songapp.BasePresenter;
+import com.sebduczmal.songapp.data.DataRepoQualifier;
+import com.sebduczmal.songapp.data.DataRepository;
 import com.sebduczmal.songapp.data.SongModel;
 import com.sebduczmal.songapp.data.SongRepositoryType;
-import com.sebduczmal.songapp.data.local.LocalSongsRepository;
-import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
 import com.sebduczmal.songapp.util.Constants;
 import com.sebduczmal.songapp.util.SortBy;
 
@@ -19,12 +19,12 @@ import timber.log.Timber;
 
 public class SongListPresenter extends BasePresenter<SongListView> {
 
-    private final RemoteSongsRepository remoteSongsRepository;
-    private final LocalSongsRepository localSongsRepository;
+    private final DataRepository remoteSongsRepository;
+    private final DataRepository localSongsRepository;
     private Single<List<SongModel>> songModelSingle;
 
-    public SongListPresenter(RemoteSongsRepository remoteSongsRepository, LocalSongsRepository
-            localSongsRepository) {
+    public SongListPresenter(@DataRepoQualifier("remote") DataRepository remoteSongsRepository,
+                             @DataRepoQualifier("local") DataRepository localSongsRepository) {
         this.remoteSongsRepository = remoteSongsRepository;
         this.localSongsRepository = localSongsRepository;
     }

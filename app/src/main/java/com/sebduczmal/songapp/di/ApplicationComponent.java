@@ -2,9 +2,13 @@ package com.sebduczmal.songapp.di;
 
 import android.content.Context;
 
+import com.sebduczmal.songapp.data.DataRepoQualifier;
+import com.sebduczmal.songapp.data.DataRepository;
 import com.sebduczmal.songapp.data.local.AssetsHelper;
 import com.sebduczmal.songapp.data.local.LocalSongsRepository;
 import com.sebduczmal.songapp.data.remote.RemoteSongsRepository;
+
+import javax.inject.Qualifier;
 
 import dagger.Component;
 import dagger.Module;
@@ -15,9 +19,9 @@ public interface ApplicationComponent {
 
     Context exposeContext();
 
-    RemoteSongsRepository exposeRemoteSongsRepository();
+    DataRepository exposeRemoteSongsRepository();
 
-    LocalSongsRepository exposeLocalSongsRepository();
+    DataRepository exposeLocalSongsRepository();
 
     @Module
     class ApplicationModule {
@@ -34,12 +38,14 @@ public interface ApplicationComponent {
         }
 
         @Provides
-        public RemoteSongsRepository providesRemoteSongsRepository() {
+        @DataRepoQualifier("remote")
+        public DataRepository providesRemoteSongsRepository() {
             return new RemoteSongsRepository();
         }
 
         @Provides
-        public LocalSongsRepository providesLocalSongsRepository() {
+        @DataRepoQualifier("local")
+        public DataRepository providesLocalSongsRepository() {
             return new LocalSongsRepository(new AssetsHelper(context));
         }
     }

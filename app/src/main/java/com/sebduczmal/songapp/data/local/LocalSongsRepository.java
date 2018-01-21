@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sebduczmal.songapp.data.DataRepository;
 import com.sebduczmal.songapp.data.SongModel;
 
 import java.io.IOException;
@@ -16,9 +17,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class LocalSongsRepository {
+public class LocalSongsRepository implements DataRepository {
 
     private AssetsHelper assetsHelper;
 
@@ -26,6 +28,7 @@ public class LocalSongsRepository {
         this.assetsHelper = assetsHelper;
     }
 
+    @Override
     public Single<List<SongModel>> getSongsObservable(String searchQuery) {
         if (TextUtils.isEmpty(searchQuery)) {
             return Single.just(Collections.emptyList());
@@ -33,8 +36,14 @@ public class LocalSongsRepository {
             return Observable
                     .fromIterable(assetsHelper.getLocalSongsList())
                     .subscribeOn(Schedulers.io())
-                    .filter(songModel -> songModel.getAlbum().toLowerCase().contains(searchQuery
+                    .filter(localSongModel -> localSongModel.getAlbum().toLowerCase().contains(searchQuery
                             .toLowerCase()))
+                    .map(new Function<LocalSongModel, SongModel>() {
+                        @Override
+                        public SongModel apply(LocalSongModel localSongModel) throws Exception {
+                            return null;
+                        }
+                    })
                     .toList();
         }
     }

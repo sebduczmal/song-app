@@ -9,12 +9,22 @@ import com.google.gson.annotations.SerializedName;
 
 public class SongModel implements Parcelable {
 
-    @SerializedName(value = "trackName", alternate = {"Song Clean"}) private String title;
-    @SerializedName(value = "artistName", alternate = {"ARTIST CLEAN"}) private String artist;
-    @SerializedName(value = "releaseDate", alternate = {"Release Year"}) private String year;
-    @SerializedName(value = "collectionName", alternate = {"COMBINED"}) private String album;
-    @SerializedName("primaryGenreName") private String genre;
-    @SerializedName("artworkUrl100") private String thumbnailUrl;
+    private String title;
+    private String artist;
+    private String year;
+    private String album;
+    private String genre;
+    private String thumbnailUrl;
+
+    public SongModel(String title, String artist, String year, String album, String genre, String
+            thumbnailUrl) {
+        this.title = title;
+        this.artist = artist;
+        this.year = year;
+        this.album = album;
+        this.genre = genre;
+        this.thumbnailUrl = thumbnailUrl;
+    }
 
     protected SongModel(Parcel in) {
         title = in.readString();

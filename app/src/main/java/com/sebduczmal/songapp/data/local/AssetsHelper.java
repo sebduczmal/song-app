@@ -38,8 +38,8 @@ public class AssetsHelper {
         return json;
     }
 
-    public List<SongModel> getLocalSongsList() {
-        final Type type = new TypeToken<List<SongModel>>() {}.getType();
+    public List<LocalSongModel> getLocalSongsList() {
+        final Type type = new TypeToken<List<LocalSongModel>>() {}.getType();
         return new Gson().fromJson(loadLocalSongsJson(), type);
     }
 }
